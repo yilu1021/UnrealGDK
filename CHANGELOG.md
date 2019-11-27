@@ -5,6 +5,7 @@ The format of this Changelog is based on [Keep a Changelog](https://keepachangel
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased-`x.y.z`] - 2019-xx-xx
+- You can now launch cloud deployments in China by specifying the `CN` region in the Deployment Launcher.
 
 ## [`0.7.0-preview`] - 2019-10-11
 
