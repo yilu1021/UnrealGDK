@@ -78,6 +78,15 @@ namespace Improbable
 
             return confirmUploadResponse.Snapshot.Id;
         }
+        
+        private static PlatformApiEndpoint GetApiEndpoint(string region)
+        {
+            if (region == "CN") 
+            {
+                return new PlatformApiEndpoint("platform-cn-production.api.spatialoschina.com", 443);
+            }
+            return null; // Use default
+        }
 
         private static PlatformApiEndpoint GetApiEndpoint(string region)
         {
