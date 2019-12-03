@@ -87,6 +87,11 @@ void FLocalDeploymentManager::SetInChina(bool bChinaEnabled)
 	bIsInChina = bChinaEnabled;
 }
 
+const FString FLocalDeploymentManager::GetSpotExe()
+{
+	bIsInChina = bChinaEnabled;
+}
+
 void FLocalDeploymentManager::StartUpWorkerConfigDirectoryWatcher()
 {
 	FDirectoryWatcherModule& DirectoryWatcherModule = FModuleManager::LoadModuleChecked<FDirectoryWatcherModule>(TEXT("DirectoryWatcher"));
@@ -447,9 +452,8 @@ bool FLocalDeploymentManager::GetLocalDeploymentStatus()
 
 bool FLocalDeploymentManager::IsServiceRunningAndInCorrectDirectory()
 {
-	FString SpotProjectInfoArgs = TEXT("alpha service project-info --json");
-	FString SpotProjectInfoResult;
-	FString StdErr;
+	FString SpatialServiceStatusArgs = FString::Printf(TEXT("service status %s"), *GetDomainEnvironmentStr(bIsInChina));
+	FString ServiceStatusResult;
 	int32 ExitCode;
 
 	FPlatformProcess::ExecProcess(*FSpatialGDKServicesModule::GetSpotExe(), *SpotProjectInfoArgs, &ExitCode, &SpotProjectInfoResult, &StdErr);
