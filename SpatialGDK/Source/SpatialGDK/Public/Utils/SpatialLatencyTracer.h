@@ -103,6 +103,8 @@ public:
 	void WriteToLatencyTrace(const TraceKey Key, const FString& TraceDesc);
 	void EndLatencyTrace(const TraceKey Key, const FString& TraceDesc);
 
+	void FinalizeKeyUsage(TraceKey key);
+
 	void WriteTraceToSchemaObject(const TraceKey Key, Schema_Object* Obj, const Schema_FieldId FieldId);
 	TraceKey ReadTraceFromSchemaObject(Schema_Object* Obj, const Schema_FieldId FieldId);
 

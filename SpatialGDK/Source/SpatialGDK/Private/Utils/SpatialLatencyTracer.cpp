@@ -69,6 +69,8 @@ void USpatialLatencyTracer::RegisterProject(UObject* WorldContextObject, const F
 	std::cerr.rdbuf(&Stream);
 
 	StdoutExporter::Register();
+
+
 #endif // TRACE_LIB_ACTIVE
 }
 
@@ -183,6 +185,11 @@ void USpatialLatencyTracer::EndLatencyTrace(const TraceKey Key, const FString& T
 	}
 }
 
+void USpatialLatencyTracer::FinalizeKeyUsage(TraceKey Key)
+{
+	TraceMap.Remove(Key);
+}
+
 void USpatialLatencyTracer::WriteTraceToSchemaObject(const TraceKey Key, Schema_Object* Obj, const Schema_FieldId FieldId)
 {
 	FScopeLock Lock(&Mutex);
@@ -272,6 +279,7 @@ void USpatialLatencyTracer::ResetWorkerId()
 
 void USpatialLatencyTracer::OnEnqueueMessage(const SpatialGDK::FOutgoingMessage* Message)
 {
+	FScopeLock Lock(&Mutex);
 	if (Message->Type == SpatialGDK::EOutgoingMessageType::ComponentUpdate)
 	{
 		const SpatialGDK::FComponentUpdate* ComponentUpdate = static_cast<const SpatialGDK::FComponentUpdate*>(Message);
@@ -290,6 +298,7 @@ void USpatialLatencyTracer::OnEnqueueMessage(const SpatialGDK::FOutgoingMessage*
 
 void USpatialLatencyTracer::OnDequeueMessage(const SpatialGDK::FOutgoingMessage* Message)
 {
+	FScopeLock Lock(&Mutex);
 	if (Message->Type == SpatialGDK::EOutgoingMessageType::ComponentUpdate)
 	{
 		const SpatialGDK::FComponentUpdate* ComponentUpdate = static_cast<const SpatialGDK::FComponentUpdate*>(Message);

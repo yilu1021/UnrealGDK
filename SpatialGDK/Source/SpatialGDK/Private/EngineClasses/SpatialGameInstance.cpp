@@ -32,6 +32,12 @@ bool USpatialGameInstance::HasSpatialNetDriver() const
 		UNetDriver * NetDriver = GEngine->FindNamedNetDriver(World, NAME_PendingNetDriver);
 		bool bShouldDestroyNetDriver = false;
 
+		UGeneralProjectSettings* Settings = GetDefault<UGeneralProjectSettings>();
+		bool bNeedsNetDriver = Settings->UsesSpatialNetworking();
+#if TRACE_LIB_ACTIVE
+		bNeedsNetDriver = true;
+#endif
+		Settings->SetUseSpatialNetDriver(bNeedsNetDriver);
 		if (NetDriver == nullptr)
 		{
 			// If Spatial networking is enabled, override the GameNetDriver with the SpatialNetDriver
@@ -44,6 +50,18 @@ bool USpatialGameInstance::HasSpatialNetDriver() const
 				{
 					DriverDefinition->DriverClassName = DriverDefinition->DriverClassNameFallback = TEXT("/Script/SpatialGDK.SpatialNetDriver");
 				}
+			}
+			else
+			{
+#if TRACE_LIB_ACTIVE
+				if (FNetDriverDefinition* DriverDefinition = GEngine->NetDriverDefinitions.FindByPredicate([](const FNetDriverDefinition& CurDef)
+				{
+					return CurDef.DefName == NAME_GameNetDriver;
+				}))
+				{
+					DriverDefinition->DriverClassName = DriverDefinition->DriverClassNameFallback = TEXT("/Script/SpatialGDK.SpatialNativeLatencyNetDriver");
+				}
+#endif
 			}
 
 			bShouldDestroyNetDriver = GEngine->CreateNamedNetDriver(World, NAME_PendingNetDriver, NAME_GameNetDriver);
