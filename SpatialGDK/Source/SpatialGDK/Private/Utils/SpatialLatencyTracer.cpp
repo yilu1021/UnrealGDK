@@ -194,24 +194,6 @@ void USpatialLatencyTracer::WriteToLatencyTrace(const TraceKey Key, const FStrin
 	if (TraceSpan* Trace = TraceMap.Find(Key))
 	{
 		WriteKeyFrameToTrace(Trace, TraceDesc);
-
-		FString TraceSpanPair;
-		auto& Ctx = Trace->context();
-		auto TraceId = Ctx.trace_id();
-		auto SpanId = Ctx.span_id();
-		TraceSpanPair += TEXT("Trace: ");
-		for (int i = 0; i < TraceId.size(); i++)
-		{
-			FString F = FString::Printf(TEXT("%02X"), TraceId[i]);
-			TraceSpanPair += F;
-		}
-		TraceSpanPair += TEXT(". Span: ");
-		for (int i = 0; i < SpanId.size(); i++)
-		{
-			FString F = FString::Printf(TEXT("%02X"), SpanId[i]);
-			TraceSpanPair += F;
-		}
-		WriteKeyFrameToTrace(Trace, TraceSpanPair);
 	}
 }
 
@@ -590,6 +572,24 @@ void USpatialLatencyTracer::WriteKeyFrameToTrace(const TraceSpan* Trace, const F
 	if (Trace != nullptr)
 	{
 		FString TraceMsg = FormatMessage(TraceDesc);
+
+		TraceMsg += "  (";
+		auto& Ctx = Trace->context();
+		auto TraceId = Ctx.trace_id();
+		auto SpanId = Ctx.span_id();
+		TraceMsg += TEXT("Trace: ");
+		for (int i = 0; i < TraceId.size(); i++)
+		{
+			FString F = FString::Printf(TEXT("%02X"), TraceId[i]);
+			TraceMsg += F;
+		}
+		TraceMsg += TEXT(". Span: ");
+		for (int i = 0; i < SpanId.size(); i++)
+		{
+			FString F = FString::Printf(TEXT("%02X"), SpanId[i]);
+			TraceMsg += F;
+		}
+		TraceMsg += ")";
 		improbable::trace::Span::StartSpan(TCHAR_TO_UTF8(*TraceMsg), Trace).End();
 	}
 }
