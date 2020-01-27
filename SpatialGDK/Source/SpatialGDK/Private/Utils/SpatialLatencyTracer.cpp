@@ -54,11 +54,12 @@ USpatialLatencyTracer::USpatialLatencyTracer()
 {
 #if TRACE_LIB_ACTIVE
 	ActiveTraceKey = InvalidTraceKey;
+	MessagePrefix = TEXT("");
 	ResetWorkerId();
 #endif
 }
 
-void USpatialLatencyTracer::RegisterProject(UObject* WorldContextObject, const FString& ProjectId)
+void USpatialLatencyTracer::RegisterProject(UObject* WorldContextObject, const FString& ProjectId, const FString& MessagePrefix)
 {
 #if TRACE_LIB_ACTIVE
 	using namespace improbable::exporters::trace;
@@ -69,13 +70,8 @@ void USpatialLatencyTracer::RegisterProject(UObject* WorldContextObject, const F
 	std::cerr.rdbuf(&Stream);
 
 	StdoutExporter::Register();
-#endif // TRACE_LIB_ACTIVE
-}
 
-void USpatialLatencyTracer::SetMessagePrefix(const FString& NewMessagePrefix)
-{
-#if TRACE_LIB_ACTIVE
-	MessagePrefix = NewMessagePrefix;
+	GetTracer(WorldContextObject)->MessagePrefix = MessagePrefix;
 #endif // TRACE_LIB_ACTIVE
 }
 
@@ -152,8 +148,6 @@ USpatialLatencyTracer* USpatialLatencyTracer::GetTracer(UObject* WorldContextObj
 }
 
 #if TRACE_LIB_ACTIVE
-FString USpatialLatencyTracer::MessagePrefix = TEXT("");
-
 bool USpatialLatencyTracer::IsValidKey(const TraceKey Key)
 {
 	FScopeLock Lock(&Mutex);

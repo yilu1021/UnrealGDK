@@ -67,11 +67,7 @@ public:
 
 	// Call with your google project id. This must be called before latency trace calls are made
 	UFUNCTION(BlueprintCallable, Category = "SpatialOS", meta = (WorldContext = "WorldContextObject"))
-	static void RegisterProject(UObject* WorldContextObject, const FString& ProjectId);
-
-	// Set a prefix to be used for all span names. Resulting uploaded span names are of the format "PREFIX(WORKER_ID) : USER_SPECIFIED_NAME".
-	UFUNCTION(BlueprintCallable, Category = "SpatialOS", meta = (WorldContext = "WorldContextObject"))
-	static void SetMessagePrefix(const FString& NewMessagePrefix);
+	static void RegisterProject(UObject* WorldContextObject, const FString& ProjectId, const FString& MessagePrefix = TEXT(""));
 
 	// Start a latency trace. This will start the latency timer and attach it to a specific RPC.
 	UFUNCTION(BlueprintCallable, Category = "SpatialOS", meta = (WorldContext = "WorldContextObject"))
@@ -143,7 +139,7 @@ private:
 	void ClearTrackingInformation();
 
 	FString WorkerId;
-	static FString MessagePrefix;
+	FString MessagePrefix;
 
 	// This is used to track if there is an active trace within a currently processing network call. The user is
 	// able to hook into this active trace, and `continue` it to another network relevant call. If so, the
