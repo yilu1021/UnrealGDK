@@ -9,7 +9,7 @@
 #include "Misc/FileHelper.h"
 #include "Modules/ModuleManager.h"
 #include "SlateOptMacros.h"
-#include "SpatialGDKServicesConstants.h"
+#include "SpatialGDKServicesSettings.h"
 #include "SpatialGDKServicesModule.h"
 #include "Internationalization/Regex.h"
 

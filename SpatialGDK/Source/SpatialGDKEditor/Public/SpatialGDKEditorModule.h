@@ -20,4 +20,5 @@ private:
 	bool HandleEditorSettingsSaved();
 	bool HandleRuntimeSettingsSaved();
 	bool HandleCloudLauncherSettingsSaved();
+	bool HandleServicesSettingsSaved();
 };

@@ -13,6 +13,7 @@
 #include "Serialization/JsonSerializer.h"
 #include "SpatialGDKSettings.h"
 #include "SpatialGDKEditorSettings.h"
+#include "SpatialGDKServicesSettings.h"
 #include "SpatialGDKServicesConstants.h"
 #include "SpatialGDKServicesModule.h"
 #include "Widgets/Text/STextBlock.h"
@@ -112,7 +113,7 @@ FReply FSpatialGDKEditorLayoutDetails::GenerateDevAuthToken()
 
 	FString CreateDevAuthTokenResult;
 	int32 ExitCode;
-	FSpatialGDKServicesModule::ExecuteAndReadOutput(SpatialGDKServicesConstants::SpatialExe, Arguments, SpatialGDKServicesConstants::SpatialOSDirectory, CreateDevAuthTokenResult, ExitCode);
+	FSpatialGDKServicesModule::ExecuteAndReadOutput(GetDefault<USpatialGDKServicesSettings>()->GetSpatialExe(), Arguments, SpatialGDKServicesConstants::SpatialOSDirectory, CreateDevAuthTokenResult, ExitCode);
 
 	if (ExitCode != 0)
 	{
@@ -155,11 +156,10 @@ FReply FSpatialGDKEditorLayoutDetails::GenerateDevAuthToken()
 		return FReply::Unhandled();
 	}
 
-	if (USpatialGDKEditorSettings* SpatialGDKEditorSettings = GetMutableDefault<USpatialGDKEditorSettings>())
+	if (USpatialGDKServicesSettings* SpatialGDKServicesSettings = GetMutableDefault<USpatialGDKServicesSettings>())
 	{
-		SpatialGDKEditorSettings->DevelopmentAuthenticationToken = TokenSecret;
-		SpatialGDKEditorSettings->SaveConfig();
-		SpatialGDKEditorSettings->SetRuntimeDevelopmentAuthenticationToken();
+		SpatialGDKServicesSettings->DevelopmentAuthenticationToken = TokenSecret;
+		SpatialGDKServicesSettings->SaveConfig();
 	}
 
 	return FReply::Handled();
@@ -167,29 +167,30 @@ FReply FSpatialGDKEditorLayoutDetails::GenerateDevAuthToken()
 
 bool FSpatialGDKEditorLayoutDetails::TryConstructMobileCommandLineArgumentsFile(FString& CommandLineArgsFile)
 {
-	const USpatialGDKEditorSettings* SpatialGDKSettings = GetDefault<USpatialGDKEditorSettings>();
+	const USpatialGDKEditorSettings* SpatialGDKEditorSettings = GetDefault<USpatialGDKEditorSettings>();
+	const USpatialGDKServicesSettings* SpatialGDKServicesSettings = GetDefault<USpatialGDKServicesSettings>();
 	const FString ProjectName = FApp::GetProjectName();
 
 	// The project path is based on this: https://github.com/improbableio/UnrealEngine/blob/4.22-SpatialOSUnrealGDK-release/Engine/Source/Programs/AutomationTool/AutomationUtils/DeploymentContext.cs#L408
 	const FString MobileProjectPath = FString::Printf(TEXT("../../../%s/%s.uproject"), *ProjectName, *ProjectName);
 	FString TravelUrl;
-	FString SpatialOSOptions = FString::Printf(TEXT("-workerType %s"), *(SpatialGDKSettings->MobileWorkerType));
-	if (SpatialGDKSettings->bMobileConnectToLocalDeployment)
+	FString SpatialOSOptions = FString::Printf(TEXT("-workerType %s"), *(SpatialGDKEditorSettings->MobileWorkerType));
+	if (SpatialGDKEditorSettings->bMobileConnectToLocalDeployment)
 	{
-		if (SpatialGDKSettings->MobileRuntimeIP.IsEmpty())
+		if (SpatialGDKEditorSettings->MobileRuntimeIP.IsEmpty())
 		{
 			UE_LOG(LogSpatialGDKEditorLayoutDetails, Error, TEXT("The Runtime IP is currently not set. Please make sure to specify a Runtime IP."));
 			FMessageDialog::Open(EAppMsgType::Ok, FText::FromString(FString::Printf(TEXT("The Runtime IP is currently not set. Please make sure to specify a Runtime IP."))));
 			return false;
 		}
 
-		TravelUrl = SpatialGDKSettings->MobileRuntimeIP;
+		TravelUrl = SpatialGDKEditorSettings->MobileRuntimeIP;
 	}
 	else
 	{
 		TravelUrl = TEXT("connect.to.spatialos");
 
-		if (SpatialGDKSettings->DevelopmentAuthenticationToken.IsEmpty())
+		if (SpatialGDKServicesSettings->DevelopmentAuthenticationToken.IsEmpty())
 		{
 			FReply GeneratedTokenReply = GenerateDevAuthToken();
 			if (!GeneratedTokenReply.IsEventHandled())
@@ -198,14 +199,14 @@ bool FSpatialGDKEditorLayoutDetails::TryConstructMobileCommandLineArgumentsFile(
 			}
 		}
 
-		SpatialOSOptions += FString::Printf(TEXT(" +devauthToken %s"), *(SpatialGDKSettings->DevelopmentAuthenticationToken));
-		if (!SpatialGDKSettings->DevelopmentDeploymentToConnect.IsEmpty())
+		SpatialOSOptions += FString::Printf(TEXT(" +devauthToken %s"), *(SpatialGDKServicesSettings->DevelopmentAuthenticationToken));
+		if (!SpatialGDKServicesSettings->DevelopmentDeploymentToConnect.IsEmpty())
 		{
-			SpatialOSOptions += FString::Printf(TEXT(" +deployment %s"), *(SpatialGDKSettings->DevelopmentDeploymentToConnect));
+			SpatialOSOptions += FString::Printf(TEXT(" +deployment %s"), *(SpatialGDKServicesSettings->DevelopmentDeploymentToConnect));
 		}
 	}
 
-	const FString SpatialOSCommandLineArgs = FString::Printf(TEXT("%s %s %s %s"), *MobileProjectPath, *TravelUrl, *SpatialOSOptions, *(SpatialGDKSettings->MobileExtraCommandLineArgs));
+	const FString SpatialOSCommandLineArgs = FString::Printf(TEXT("%s %s %s %s"), *MobileProjectPath, *TravelUrl, *SpatialOSOptions, *(SpatialGDKEditorSettings->MobileExtraCommandLineArgs));
 	CommandLineArgsFile = FPaths::ConvertRelativePathToFull(FPaths::Combine(*FPaths::ProjectLogDir(), TEXT("ue4commandline.txt")));
 
 	if (!FFileHelper::SaveStringToFile(SpatialOSCommandLineArgs, *CommandLineArgsFile, FFileHelper::EEncodingOptions::ForceUTF8WithoutBOM))

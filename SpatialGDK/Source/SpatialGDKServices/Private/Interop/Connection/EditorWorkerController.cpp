@@ -2,7 +2,7 @@
 
 #include "Interop/Connection/EditorWorkerController.h"
 
-#include "SpatialGDKServicesConstants.h"
+#include "SpatialGDKServicesSettings.h"
 #include "SpatialGDKServicesPrivate.h"
 
 #include "Editor.h"
@@ -67,6 +67,7 @@ struct EditorWorkerController
 
 	FProcHandle ReplaceWorker(const FString& OldWorker, const FString& NewWorker)
 	{
+		const USpatialGDKServicesSettings* SpatialGDKServicesSettings = GetDefault<USpatialGDKServicesSettings>();
 		const FString CmdArgs = FString::Printf(
 			TEXT("local worker replace "
 				"--local_service_grpc_port %s "
@@ -74,7 +75,7 @@ struct EditorWorkerController
 				"--replacing_worker_id %s"), *ServicePort, *OldWorker, *NewWorker);
 		uint32 ProcessID = 0;
 		FProcHandle ProcHandle = FPlatformProcess::CreateProc(
-			*SpatialGDKServicesConstants::SpatialExe, *CmdArgs, false, true, true, &ProcessID, 2 /*PriorityModifier*/,
+			*(SpatialGDKServicesSettings->GetSpatialExe()), *CmdArgs, false, true, true, &ProcessID, 2 /*PriorityModifier*/,
 			nullptr, nullptr, nullptr);
 
 		return ProcHandle;

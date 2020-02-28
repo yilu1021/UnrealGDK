@@ -320,10 +320,4 @@ public:
 	/** Use TLS encryption for UnrealWorker (server) workers connection. May impact performance. */
 	UPROPERTY(EditAnywhere, Config, Category = "Connection")
 	bool bUseSecureServerConnection;
-
-public:
-	// UI Hidden settings passed through from SpatialGDKEditorSettings
-	bool bUseDevelopmentAuthenticationFlow;
-	FString DevelopmentAuthenticationToken;
-	FString DevelopmentDeploymentToConnect;
 };

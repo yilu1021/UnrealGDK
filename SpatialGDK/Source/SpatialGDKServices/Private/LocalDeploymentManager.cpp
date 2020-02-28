@@ -18,6 +18,7 @@
 #include "SocketSubsystem.h"
 #include "SpatialCommandUtils.h"
 #include "SpatialGDKServicesConstants.h"
+#include "SpatialGDKServicesSettings.h"
 #include "SpatialGDKServicesModule.h"
 #include "UObject/CoreNet.h"
 
@@ -135,10 +136,11 @@ void FLocalDeploymentManager::WorkerBuildConfigAsync()
 {
 	AsyncTask(ENamedThreads::AnyBackgroundThreadNormalTask, [this]
 	{
+		const USpatialGDKServicesSettings* SpatialGDKServicesSettings = GetDefault<USpatialGDKServicesSettings>();
 		FString BuildConfigArgs = FString::Printf(TEXT("worker build build-config %s"), *GetDomainEnvironmentStr(bIsInChina));
 		FString WorkerBuildConfigResult;
 		int32 ExitCode;
-		FSpatialGDKServicesModule::ExecuteAndReadOutput(SpatialGDKServicesConstants::SpatialExe, BuildConfigArgs, SpatialGDKServicesConstants::SpatialOSDirectory, WorkerBuildConfigResult, ExitCode);
+		FSpatialGDKServicesModule::ExecuteAndReadOutput(SpatialGDKServicesSettings->GetSpatialExe(), BuildConfigArgs, SpatialGDKServicesConstants::SpatialOSDirectory, WorkerBuildConfigResult, ExitCode);
 
 		if (ExitCode == ExitCodeSuccess)
 		{
@@ -520,6 +522,10 @@ bool FLocalDeploymentManager::TryStopLocalDeployment()
 
 bool FLocalDeploymentManager::TryStartSpatialService(FString RuntimeIPToExpose)
 {
+	const USpatialGDKServicesSettings* SpatialGDKServicesSettings = GetDefault<USpatialGDKServicesSettings>();
+
+	UE_LOG(LogSpatialDeploymentManager, Verbose, TEXT("try spatial"), *SpatialGDKServicesSettings->GetSpatialExe());
+
 	if (!bLocalDeploymentManagerEnabled)
 	{
 		UE_LOG(LogSpatialDeploymentManager, Verbose, TEXT("Local deployment manager is disabled because spatial services are unavailable."));
@@ -551,7 +557,7 @@ bool FLocalDeploymentManager::TryStartSpatialService(FString RuntimeIPToExpose)
 	FString ServiceStartResult;
 	int32 ExitCode;
 
-	FSpatialGDKServicesModule::ExecuteAndReadOutput(SpatialGDKServicesConstants::SpatialExe, SpatialServiceStartArgs, SpatialGDKServicesConstants::SpatialOSDirectory, ServiceStartResult, ExitCode);
+	FSpatialGDKServicesModule::ExecuteAndReadOutput(SpatialGDKServicesSettings->GetSpatialExe(), SpatialServiceStartArgs, SpatialGDKServicesConstants::SpatialOSDirectory, ServiceStartResult, ExitCode);
 
 	bStartingSpatialService = false;
 
@@ -591,7 +597,8 @@ bool FLocalDeploymentManager::TryStopSpatialService()
 	FString ServiceStopResult;
 	int32 ExitCode;
 
-	FSpatialGDKServicesModule::ExecuteAndReadOutput(SpatialGDKServicesConstants::SpatialExe, SpatialServiceStartArgs, SpatialGDKServicesConstants::SpatialOSDirectory, ServiceStopResult, ExitCode);
+	const USpatialGDKServicesSettings* SpatialGDKServicesSettings = GetDefault<USpatialGDKServicesSettings>();
+	FSpatialGDKServicesModule::ExecuteAndReadOutput(SpatialGDKServicesSettings->GetSpatialExe(), SpatialServiceStartArgs, SpatialGDKServicesConstants::SpatialOSDirectory, ServiceStopResult, ExitCode);
 	bStoppingSpatialService = false;
 
 	if (ExitCode == ExitCodeSuccess)

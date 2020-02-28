@@ -10,7 +10,7 @@
 #include "Misc/Paths.h"
 
 #include "Interop/Connection/SpatialWorkerConnection.h"
-#include "SpatialGDKSettings.h"
+#include "SpatialGDKServicesSettings.h"
 #include "Utils/ErrorCodeRemapping.h"
 
 DEFINE_LOG_CATEGORY(LogSpatialConnectionManager);
@@ -154,13 +154,13 @@ void USpatialConnectionManager::Connect(bool bInitAsClient, uint32 PlayInEditorI
 
 	bConnectAsClient = bInitAsClient;
 
-	const USpatialGDKSettings* SpatialGDKSettings = GetDefault<USpatialGDKSettings>();
-	if (SpatialGDKSettings->bUseDevelopmentAuthenticationFlow && bInitAsClient)
+	const USpatialGDKServicesSettings* SpatialGDKServicesSettings = GetDefault<USpatialGDKServicesSettings>();
+	if (SpatialGDKServicesSettings->bUseDevelopmentAuthenticationFlow && bInitAsClient)
 	{
-		DevAuthConfig.Deployment = SpatialGDKSettings->DevelopmentDeploymentToConnect;
+		DevAuthConfig.Deployment = SpatialGDKServicesSettings->DevelopmentDeploymentToConnect;
 		DevAuthConfig.WorkerType = SpatialConstants::DefaultClientWorkerType.ToString();
 		DevAuthConfig.UseExternalIp = true;
-		StartDevelopmentAuth(SpatialGDKSettings->DevelopmentAuthenticationToken);
+		StartDevelopmentAuth(SpatialGDKServicesSettings->DevelopmentAuthenticationToken);
 		return;
 	}
 

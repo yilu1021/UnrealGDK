@@ -6,7 +6,7 @@
 #include "SpatialGDKDefaultLaunchConfigGenerator.h"
 #include "SpatialGDKDefaultWorkerJsonGenerator.h"
 #include "SpatialGDKEditorSettings.h"
-#include "SpatialGDKServicesConstants.h"
+#include "SpatialGDKServicesSettings.h"
 
 #include "CoreMinimal.h"
 
@@ -27,10 +27,11 @@ namespace
 
 	bool GenerateWorkerAssemblies()
 	{
+		const USpatialGDKServicesSettings* SpatialGDKServicesSettings = GetDefault<USpatialGDKServicesSettings>();
 		FString BuildConfigArgs = TEXT("worker build build-config");
 		FString WorkerBuildConfigResult;
 		int32 ExitCode;
-		FSpatialGDKServicesModule::ExecuteAndReadOutput(SpatialGDKServicesConstants::SpatialExe, BuildConfigArgs, SpatialGDKServicesConstants::SpatialOSDirectory, WorkerBuildConfigResult, ExitCode);
+		FSpatialGDKServicesModule::ExecuteAndReadOutput(SpatialGDKServicesSettings->GetSpatialExe(), BuildConfigArgs, SpatialGDKServicesConstants::SpatialOSDirectory, WorkerBuildConfigResult, ExitCode);
 
 		const int32 ExitCodeSuccess = 0;
 		return (ExitCode == ExitCodeSuccess);

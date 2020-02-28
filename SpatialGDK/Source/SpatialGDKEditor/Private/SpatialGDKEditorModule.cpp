@@ -5,6 +5,7 @@
 #include "SpatialGDKSettings.h"
 #include "SpatialGDKEditorSettings.h"
 #include "SpatialGDKEditorLayoutDetails.h"
+#include "SpatialGDKServicesSettings.h"
 
 #include "ISettingsModule.h"
 #include "ISettingsContainer.h"
@@ -55,6 +56,16 @@ void FSpatialGDKEditorModule::RegisterSettings()
 		{
 			RuntimeSettingsSection->OnModified().BindRaw(this, &FSpatialGDKEditorModule::HandleRuntimeSettingsSaved);
 		}
+
+		ISettingsSectionPtr ServicesSettingSection = SettingsModule->RegisterSettings("Project", "SpatialGDKEditor", "Services Settings",
+			LOCTEXT("USpatialGDKServicesGeneralSettingssName", "Services Settings"),
+			LOCTEXT("USpatialGDKServicesGeneralSettingsDescription", "Services configuration for the SpatialOS GDK for Unreal"),
+			GetMutableDefault<USpatialGDKServicesSettings>());
+
+		if (ServicesSettingSection.IsValid())
+		{
+			ServicesSettingSection->OnModified().BindRaw(this, &FSpatialGDKEditorModule::HandleServicesSettingsSaved);
+		}
 	}
 
 	FPropertyEditorModule& PropertyModule = FModuleManager::LoadModuleChecked<FPropertyEditorModule>("PropertyEditor");
@@ -86,6 +97,14 @@ bool FSpatialGDKEditorModule::HandleRuntimeSettingsSaved()
 
 	return true;
 }
+
+bool FSpatialGDKEditorModule::HandleServicesSettingsSaved()
+{
+	GetMutableDefault<USpatialGDKServicesSettings>()->SaveConfig();
+
+	return true;
+}
+
 
 #undef LOCTEXT_NAMESPACE
 

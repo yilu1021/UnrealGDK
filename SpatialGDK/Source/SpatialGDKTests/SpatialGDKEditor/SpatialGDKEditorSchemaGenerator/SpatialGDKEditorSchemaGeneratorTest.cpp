@@ -4,8 +4,8 @@
 
 #include "SchemaGenObjectStub.h"
 #include "SpatialGDKEditorSchemaGenerator.h"
-#include "SpatialGDKServicesConstants.h"
 #include "SpatialGDKServicesModule.h"
+#include "SpatialGDKServicesSettings.h"
 #include "SpatialGDKSettings.h"
 #include "Utils/SchemaDatabase.h"
 

@@ -11,7 +11,7 @@
 #include "SSpatialOutputLog.h"
 #include "Serialization/JsonReader.h"
 #include "Serialization/JsonSerializer.h"
-#include "SpatialGDKServicesConstants.h"
+#include "SpatialGDKServicesSettings.h"
 #include "SpatialGDKServicesPrivate.h"
 #include "Widgets/Docking/SDockTab.h"
 
@@ -74,13 +74,14 @@ FString FSpatialGDKServicesModule::GetSpatialGDKPluginDirectory(const FString& A
 
 bool FSpatialGDKServicesModule::SpatialPreRunChecks()
 {
+	const USpatialGDKServicesSettings* SpatialGDKServicesSettings = GetDefault<USpatialGDKServicesSettings>();
 	FString SpatialExistenceCheckResult;
 	int32 ExitCode;
-	ExecuteAndReadOutput(SpatialGDKServicesConstants::SpatialExe, TEXT("version"), SpatialGDKServicesConstants::SpatialOSDirectory, SpatialExistenceCheckResult, ExitCode);
+	ExecuteAndReadOutput(SpatialGDKServicesSettings->GetSpatialExe(), TEXT("version"), SpatialGDKServicesConstants::SpatialOSDirectory, SpatialExistenceCheckResult, ExitCode);
 
 	if (ExitCode != 0)
 	{
-		UE_LOG(LogSpatialDeploymentManager, Warning, TEXT("%s does not exist on this machine! Please make sure Spatial is installed before trying to start a local deployment. %s"), *SpatialGDKServicesConstants::SpatialExe, *SpatialExistenceCheckResult);
+		UE_LOG(LogSpatialDeploymentManager, Warning, TEXT("%s does not exist on this machine! Please make sure Spatial is installed before trying to start a local deployment. %s"), *SpatialGDKServicesSettings->GetSpatialExe(), *SpatialExistenceCheckResult);
 		return false;
 	}
 
