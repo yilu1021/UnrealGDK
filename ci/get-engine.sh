@@ -54,4 +54,4 @@ pushd "${GDK_HOME}"
     ## Create an UnrealEngine symlink to the correct directory
     rm -rf ${UNREAL_PATH}
     ln -s ${UNREAL_PATH} ${ENGINE_CACHE_DIRECTORY}/${UNREAL_VERSION}
-Pop-Location
+popd
