@@ -8,9 +8,9 @@ upload_build_configuration_step() {
     export BUILD_STATE=${4}
     export BUILD_COMMAND=${5}
     if [[ ${BUILD_PLATFORM} == "MacOS" ]]; then
-        buildkite-agent pipeline upload "ci/gdk_build_win.template.steps.yaml"
-    else
         buildkite-agent pipeline upload "ci/gdk_build_macos.template.steps.yaml"
+    #else
+    #    buildkite-agent pipeline upload "ci/gdk_build_win.template.steps.yaml"
     fi
 }
 
