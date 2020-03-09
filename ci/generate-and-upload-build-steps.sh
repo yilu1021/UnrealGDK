@@ -6,9 +6,12 @@ upload_build_configuration_step() {
     export BUILD_PLATFORM=${2}
     export BUILD_TARGET=${3}
     export BUILD_STATE=${4}
-    export BUILD_AGENT=${5}
-    export BUILD_COMMAND=${6}
-    buildkite-agent pipeline upload "ci/gdk_build.template.steps.yaml"
+    export BUILD_COMMAND=${5}
+    if [[ ${BUILD_PLATFORM} == "MacOS" ]]; then
+        buildkite-agent pipeline upload "ci/gdk_build_win.template.steps.yaml"
+    else
+        buildkite-agent pipeline upload "ci/gdk_build_macos.template.steps.yaml"
+    fi
 }
 
 generate_build_configuration_steps () {
@@ -20,20 +23,20 @@ generate_build_configuration_steps () {
         echo "Building for subset of supported configurations. Generating the appropriate steps..."
         
         # Win64 Development Editor build configuration
-        upload_build_configuration_step "${ENGINE_COMMIT_HASH}" "Win64" "Editor" "Development" "common" "powershell ./ci/setup-build-test-gdk.ps1"
+        upload_build_configuration_step "${ENGINE_COMMIT_HASH}" "Win64" "Editor" "Development" "powershell ./ci/setup-build-test-gdk.ps1"
 
         # Linux Development NoEditor build configuration
-        upload_build_configuration_step "${ENGINE_COMMIT_HASH}" "Linux" "" "Development" "common" "powershell ./ci/setup-build-test-gdk.ps1"
+        upload_build_configuration_step "${ENGINE_COMMIT_HASH}" "Linux" "" "Development" "powershell ./ci/setup-build-test-gdk.ps1"
         
         # MacOS Development Editor build configuration
-        upload_build_configuration_step "${ENGINE_COMMIT_HASH}" "MacOS" "Editor" "Development" "*macos" "./ci/setup-build-gdk.sh"
+        upload_build_configuration_step "${ENGINE_COMMIT_HASH}" "MacOS" "Editor" "Development" "./ci/setup-build-gdk.sh"
     else
         echo "Building for all supported configurations. Generating the appropriate steps..."
         
         # Editor builds (Test and Shipping build states do not exist for the Editor build target)
         for BUILD_STATE in "DebugGame" "Development"; do
-            upload_build_configuration_step "${ENGINE_COMMIT_HASH}" "Win64" "Editor" "${BUILD_STATE}" "common" "powershell ./ci/setup-build-test-gdk.ps1"
-            upload_build_configuration_step "${ENGINE_COMMIT_HASH}" "MacOS" "Editor" "${BUILD_STATE}" "macos" "./ci/setup-build-gdk.sh"
+            upload_build_configuration_step "${ENGINE_COMMIT_HASH}" "Win64" "Editor" "${BUILD_STATE}" "powershell ./ci/setup-build-test-gdk.ps1"
+            upload_build_configuration_step "${ENGINE_COMMIT_HASH}" "MacOS" "Editor" "${BUILD_STATE}"  "./ci/setup-build-gdk.sh"
         done
 
         # NoEditor, Client and Server builds
@@ -41,13 +44,13 @@ generate_build_configuration_steps () {
             # Prebuilt engines of native 4.22 and prior do not support Client and Server targets.
             # We use prebuilt engines in CI, but have manually added two Server configurations:
             for BUILD_STATE in "Development" "Shipping"; do
-                upload_build_configuration_step "${ENGINE_COMMIT_HASH}" "Linux" "Server" "${BUILD_STATE}" "common" "powershell ./ci/setup-build-test-gdk.ps1"
+                upload_build_configuration_step "${ENGINE_COMMIT_HASH}" "Linux" "Server" "${BUILD_STATE}" "powershell ./ci/setup-build-test-gdk.ps1"
             done
 
             # NoEditor builds
             for BUILD_PLATFORM in "Win64" "Linux"; do
                 for BUILD_STATE in "DebugGame" "Development" "Shipping"; do
-                    upload_build_configuration_step "${ENGINE_COMMIT_HASH}" "${BUILD_PLATFORM}" "" "${BUILD_STATE}" "common" "powershell ./ci/setup-build-test-gdk.ps1"
+                    upload_build_configuration_step "${ENGINE_COMMIT_HASH}" "${BUILD_PLATFORM}" "" "${BUILD_STATE}" "powershell ./ci/setup-build-test-gdk.ps1"
                 done
             done
         else
@@ -55,7 +58,7 @@ generate_build_configuration_steps () {
             for BUILD_PLATFORM in "Win64" "Linux"; do
                 for BUILD_TARGET in "" "Client" "Server"; do
                     for BUILD_STATE in "DebugGame" "Development" "Shipping"; do
-                        upload_build_configuration_step "${ENGINE_COMMIT_HASH}" "${BUILD_PLATFORM}" "${BUILD_TARGET}" "${BUILD_STATE}" "common" "powershell ./ci/setup-build-test-gdk.ps1"
+                        upload_build_configuration_step "${ENGINE_COMMIT_HASH}" "${BUILD_PLATFORM}" "${BUILD_TARGET}" "${BUILD_STATE}" "powershell ./ci/setup-build-test-gdk.ps1"
                     done
                 done
             done
