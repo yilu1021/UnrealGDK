@@ -1,18 +1,5 @@
 #!/usr/bin/env bash
 
-param(
-    [string] $unreal_path,
-    [string] $test_repo_branch,
-    [string] $test_repo_url,
-    [string] $test_repo_uproject_path,
-    [string] $test_repo_path,
-    [string] $msbuild_exe,
-    [string] $gdk_home,
-    [string] $build_platform,
-    [string] $build_state,
-    [string] $build_target
-)
-
 UNREAL_PATH=${1}
 TEST_REPO_BRANCH=${2}
 TEST_REPO_URL=${3}
