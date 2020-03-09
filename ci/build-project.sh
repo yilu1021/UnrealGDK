@@ -20,6 +20,7 @@ fi
 
 # The Plugin does not get recognised as an Engine plugin, because we are using a pre-built version of the engine
 # copying the plugin into the project's folder bypasses the issue
+mkdir -p ${TESTP_REPO_PATH}/Game/Plugins/UnrealGDK 
 ln -s ${GDK_HOME} ${TESTP_REPO_PATH}/Game/Plugins/UnrealGDK 
 
 # Disable tutorials, otherwise the closing of the window will crash the editor due to some graphic context reason
