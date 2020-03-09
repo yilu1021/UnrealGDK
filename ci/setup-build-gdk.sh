@@ -8,7 +8,7 @@ UNREAL_PATH="${BUILD_HOME}/UnrealEngine"
 
 
 TEST_REPO_URL="git@github.com:improbable/UnrealGDKEngineNetTest.git"
-TEST_REPO_RELATIVE_UPROJECT_PATH="Game\EngineNetTest.uproject"
+TEST_REPO_RELATIVE_UPROJECT_PATH="Game/EngineNetTest.uproject"
 TEST_REPO_MAP="NetworkingMap"
 TEST_PROJECT_NAME="NetworkTestProject"
 CHOSEN_TEST_REPO_BRANCH="master"
