@@ -44,7 +44,7 @@ env:
 steps:
   - label: "build-${ENGINE_COMMIT_HASH}-${BUILD_PLATFORM}-${BUILD_TARGET}-${BUILD_STATE}"
     command: ${BUILD_COMMAND}
-    <<: *common # This folds the YAML named anchor into this step. Overrides, if any, should follow, not precede.
+    <<: *${BUILD_AGENT} # This folds the YAML named anchor into this step. Overrides, if any, should follow, not precede.
     artifact_paths:
       - "../UnrealEngine/Engine/Programs/AutomationTool/Saved/Logs/*"
     env:
