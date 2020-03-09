@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
 # TODO make those parameters!
-UNREAL_PATH="${1:-$(pwd)/../../UnrealEngine}"
+UNREAL_PATH="${1:-$(pwd)/../UnrealEngine}"
 ENGINE_CACHE_DIRECTORY="${2:-$(pwd)/UnrealEngine-Cache}"
 GCS_PUBLISH_BUCKET="${3:-io-internal-infra-unreal-artifacts-production/UnrealEngine}"
 
-GDK_HOME="$(pwd)/.."
+GDK_HOME="$(pwd)"
 
 pushd "${GDK_HOME}"
     # Fetch the version of Unreal Engine we need

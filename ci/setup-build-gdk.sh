@@ -3,7 +3,7 @@
 #TODO make parameters
 GDK_HOME="$(pwd)"
 GCS__PUBLISH_BUCKET="io-internal-infra-unreal-artifacts-production/UnrealEngine"
-BUILD_HOME="$(pwd)/../.."
+BUILD_HOME="$(pwd)/.."
 UNREAL_PATH="${BUILD_HOME}/UnrealEngine"
 
 
