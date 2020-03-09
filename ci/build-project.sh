@@ -35,7 +35,7 @@ fi
 echo "--- Building project"
 echo "${UNREAL_PATH}/Engine/Build/BatchFiles/Mac/Build.sh ${BUILD_TARGET} ${BUILD_PLATFORM} ${BUILD_STATE} ${TEST_REPO_UPORJECT_PATH}"
 
-${UNREAL_PATH}/Engine/Build/BatchFiles/Mac/Build.sh ${BUILD_TARGET} ${BUILD_PLATFORM} ${BUILD_STATE} "${TEST_REPO_UPORJECT_PATH}"
+${UNREAL_PATH}/Engine/Build/BatchFiles/Mac/Build.sh EngineNetTests${BUILD_TARGET} ${BUILD_PLATFORM} ${BUILD_STATE} "${TEST_REPO_UPORJECT_PATH}"
 if [[ $? -ne 0 ]]; then
   echo "Failed to build testing project."
   exit 1

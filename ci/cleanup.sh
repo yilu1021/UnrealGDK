@@ -11,6 +11,6 @@ GDK_IN_TEST_REPO="${PROJECT_ABSOLUTE_PATH}/Game/Plugins/UnrealGDK"
 spatial service stop
 pkill -9 -f java
 
-rm -f ${UNREAL_PATH}
-rm -f ${GDK_IN_TEST_REPO}
-rm -rf ${PROJECT_ABSOLUTE_PATH}
+#rm -f ${UNREAL_PATH}
+#rm -f ${GDK_IN_TEST_REPO}
+#rm -rf ${PROJECT_ABSOLUTE_PATH}
