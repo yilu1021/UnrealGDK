@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+source /opt/improbable/environment
+
 #TODO make parameters
 GDK_HOME="$(pwd)"
 GCS__PUBLISH_BUCKET="io-internal-infra-unreal-artifacts-production/UnrealEngine"
