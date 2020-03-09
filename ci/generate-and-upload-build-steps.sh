@@ -26,14 +26,14 @@ generate_build_configuration_steps () {
         upload_build_configuration_step "${ENGINE_COMMIT_HASH}" "Linux" "" "Development" "*common" "powershell ./ci/setup-build-test-gdk.ps1"
         
         # MacOS Development Editor build configuration
-        upload_build_configuration_step "${ENGINE_COMMIT_HASH}" "MacOS" "Editor" "Development" "*macos" "./ci/setup-build-gdk.sh"
+        #upload_build_configuration_step "${ENGINE_COMMIT_HASH}" "MacOS" "Editor" "Development" "*macos" "./ci/setup-build-gdk.sh"
     else
         echo "Building for all supported configurations. Generating the appropriate steps..."
         
         # Editor builds (Test and Shipping build states do not exist for the Editor build target)
         for BUILD_STATE in "DebugGame" "Development"; do
             upload_build_configuration_step "${ENGINE_COMMIT_HASH}" "Win64" "Editor" "${BUILD_STATE}" "*common" "powershell ./ci/setup-build-test-gdk.ps1"
-            upload_build_configuration_step "${ENGINE_COMMIT_HASH}" "MacOS" "Editor" "${BUILD_STATE}" "*macos" "./ci/setup-build-gdk.sh"
+            #upload_build_configuration_step "${ENGINE_COMMIT_HASH}" "MacOS" "Editor" "${BUILD_STATE}" "*macos" "./ci/setup-build-gdk.sh"
         done
 
         # NoEditor, Client and Server builds
