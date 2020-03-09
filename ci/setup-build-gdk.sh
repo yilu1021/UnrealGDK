@@ -23,7 +23,7 @@ fi
 
 # Download Unreal Engine
 echo "--- get-unreal-engine"
-${GDK_HOME}/ci//get-engine.sh ${UNREAL_PATH}
+${GDK_HOME}/ci/get-engine.sh ${UNREAL_PATH}
 
 # Run the required setup steps
 echo "--- setup-gdk"
