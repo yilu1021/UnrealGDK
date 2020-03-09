@@ -23,7 +23,7 @@ fi
 ln -s ${GDK_HOME} ${TESTP_REPO_PATH}/Game/Plugins 
 
 # Disable tutorials, otherwise the closing of the window will crash the editor due to some graphic context reason
-echo "`r`n[/Script/IntroTutorials.TutorialStateSettings]`r`nTutorialsProgress=(Tutorial=/Engine/Tutorial/Basics/LevelEditorAttract.LevelEditorAttract_C,CurrentStage=0,bUserDismissed=True)`r`n" >> ${UNREAL_PATH}/Engine/Config/BaseEditorSettings.ini
+echo "\r\n[/Script/IntroTutorials.TutorialStateSettings]\r\nTutorialsProgress=(Tutorial=/Engine/Tutorial/Basics/LevelEditorAttract.LevelEditorAttract_C,CurrentStage=0,bUserDismissed=True)\r\n" >> ${UNREAL_PATH}/Engine/Config/BaseEditorSettings.ini
 
 echo "--- Generating project files"
 ${UNREAL_PATH}/Engine/Build/BatchFiles/Mac/Build.sh -projectfiles -project="${TEST_REPO_UPORJECT_PATH}" -game -engine -progress
