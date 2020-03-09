@@ -21,7 +21,7 @@ fi
 
 # Download Unreal Engine
 echo "--- get-unreal-engine"
-./get-engine.sh ${UNREAL_PATH}
+${GDK_HOME}/ci//get-engine.sh ${UNREAL_PATH}
 
 # Run the required setup steps
 echo "--- setup-gdk"
@@ -29,6 +29,6 @@ ${GDK_HOME}/Setup.sh --mobile
 
 # Build the testing project
 echo "--- build-project"
-./build-project.sh ${UNREAL_PATH} ${CHOSEN_TEST_REPO_BRANCH} ${TEST_REPO_URL} "${BUILD_HOME}/${TEST_PROJECT_NAME}/${TEST_REPO_RELATIVE_UPROJECT_PATH}" "${BUILD_HOME}/${TEST_PROJECT_NAME}" ${GDK_HOME} ${BUILD_PLATFORM} ${BUILD_STATE} ${BUILD_TARGET}
+${GDK_HOME}/ci/build-project.sh ${UNREAL_PATH} ${CHOSEN_TEST_REPO_BRANCH} ${TEST_REPO_URL} "${BUILD_HOME}/${TEST_PROJECT_NAME}/${TEST_REPO_RELATIVE_UPROJECT_PATH}" "${BUILD_HOME}/${TEST_PROJECT_NAME}" ${GDK_HOME} ${BUILD_PLATFORM} ${BUILD_STATE} ${BUILD_TARGET}
 
 # TODO need to add tests back in at some point
