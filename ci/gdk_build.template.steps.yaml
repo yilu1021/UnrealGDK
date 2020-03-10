@@ -9,7 +9,7 @@ common: &common
     - "agent_count=1"
     - "capable_of_building=gdk-for-unreal"
     - "environment=production"
-    - "machine_type=quad-high-cpu"  # this name matches to SpatialOS node-size names
+    - "machine_type=single-high-cpu"  # this name matches to SpatialOS node-size names
     - "platform=windows"
     - "permission_set=builder"
     - "scaler_version=2"
@@ -28,7 +28,7 @@ env:
   FASTBUILD_BROKERAGE_PATH: "\\\\fastbuild-brokerage.${CI_ENVIRONMENT}-intinf-eu1.i8e.io\\samba"
 
 steps:
-  - label: "build-${ENGINE_COMMIT_HASH}-${BUILD_PLATFORM}-${BUILD_TARGET}-${BUILD_STATE}"
+  - label: "build-${ENGINE_COMMIT_HASH}-${BUILD_PLATFORM}-${BUILD_TARGET}-${BUILD_STATE}-${TEST_CONFIG}"
     command: "powershell ./ci/setup-build-test-gdk.ps1"
     <<: *common # This folds the YAML named anchor into this step. Overrides, if any, should follow, not precede.
     artifact_paths:
