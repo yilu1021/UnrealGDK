@@ -36,6 +36,13 @@ fi
 echo "--- Building project"
 
 "${UNREAL_PATH}/Engine/Build/BatchFiles/Mac/Build.sh" "${BUILD_TARGET}" "${BUILD_PLATFORM}" "${BUILD_STATE}" "${TEST_REPO_UPORJECT_PATH}"
+
+BUILD_CONFIGURATION=${BUILD_STATE}${BUILD_TARGET}
+
+TEST_REPO_UPORJECT_PATH=${TEST_REPO_UPORJECT_PATH/.uproject/.sln} # Replace / with _ since / is treated as the folder seperator in GCS
+
+msbuild /nologo ${TEST_REPO_UPORJECT_PATH} /p:Configuration="${BUILD_CONFIGURATION}";Platform="${BUILD_PLATFORM}"
+
 if [[ $? -ne 0 ]]; then
   echo "Failed to build testing project."
   exit 1
