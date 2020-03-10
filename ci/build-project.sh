@@ -35,7 +35,7 @@ fi
 
 echo "--- Building project"
 
-"${UNREAL_PATH}/Engine/Build/BatchFiles/Mac/Build.sh" "${BUILD_TARGET}" "${BUILD_PLATFORM}" "${BUILD_STATE}" "${TEST_REPO_UPORJECT_PATH}"
+#"${UNREAL_PATH}/Engine/Build/BatchFiles/Mac/Build.sh" "${BUILD_TARGET}" "${BUILD_PLATFORM}" "${BUILD_STATE}" "${TEST_REPO_UPORJECT_PATH}"
 
 BUILD_CONFIGURATION=${BUILD_STATE}${BUILD_TARGET}
 

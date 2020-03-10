@@ -4,7 +4,7 @@ source /opt/improbable/environment
 
 GDK_HOME="${1:-$(pwd)}"
 GCS__PUBLISH_BUCKET="${2:-io-internal-infra-unreal-artifacts-production/UnrealEngine}"
-BUILD_HOME="#{3:-$(pwd)/..}"
+BUILD_HOME="${3:-$(pwd)/..}"
 
 UNREAL_PATH="${BUILD_HOME}/UnrealEngine"
 TEST_REPO_URL="git@github.com:improbable/UnrealGDKEngineNetTest.git"
@@ -21,7 +21,7 @@ fi
 
 # Download Unreal Engine
 echo "--- get-unreal-engine"
-${GDK_HOME}/ci/get-engine.sh "{UNREAL_PATH}"
+${GDK_HOME}/ci/get-engine.sh "${UNREAL_PATH}"
 
 # Run the required setup steps
 echo "--- setup-gdk"
