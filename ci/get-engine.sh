@@ -11,8 +11,9 @@ pushd "${GDK_HOME}"
     # Fetch the version of Unreal Engine we need
     pushd "ci"
         # Allow overriding the engine version if required
+        echo ls
         if [[ -n ${ENGINE_COMMIT_HASH:-} ]]; then
-        	VERSION_DESCRIPTION=${ENGINE_COMMIT_HASH}
+        	VERSION_DESCRIPTION="${ENGINE_COMMIT_HASH}"
             echo "Using engine version defined by ENGINE_COMMIT_HASH: ${VERSION_DESCRIPTION}"
         else
             # Read Engine version from the file and trim any trailing white spaces and new lines.
@@ -28,7 +29,7 @@ pushd "${GDK_HOME}"
         # TODO override this for now
             VERSION_BRANCH=${VERSION_DESCRIPTION#"${HEAD_VERSION_PREFIX}"} # Remove the prefix to just get the branch name
             VERSION_BRANCH= ${VERSION_BRANCH///_} # Replace / with _ since / is treated as the folder seperator in GCS
-VERSION_BRANCH="feature_macos-buildkite"
+            VERSION_BRANCH="feature_macos-buildkite"
             # Download the head pointer file for the given branch, which contains the latest built version of the engine from that branch
             HEAD_POINTER_GCS_PATH="gs://${GCS_PUBLISH_BUCKET}/HEAD/mac-${VERSION_BRANCH}.version"
             UNREAL_VERSION=$(gsutil cp ${HEAD_POINTER_GCS_PATH} -) # the '-' at the end instructs gsutil to download the file and output the contents to stdout
@@ -45,11 +46,11 @@ VERSION_BRANCH="feature_macos-buildkite"
         echo "--- download-unreal-engine"
         ENGINE_GCS_PATH="gs://${GCS_PUBLISH_BUCKET}/${UNREAL_VERSION}.zip"
         echo "Downloading Unreal Engine artifacts version ${UNREAL_VERSION} from ${ENGINE_GCS_PATH}"
-        gsutil cp -n ${ENGINE_GCS_PATH} ${UNREAL_VERSION}.zip
+        gsutil cp -n "${ENGINE_GCS_PATH}" "${UNREAL_VERSION}".zip
 
-       7z x ${UNREAL_VERSION}.zip -o${UNREAL_VERSION} -aos
+       7z x "${UNREAL_VERSION}".zip -o${UNREAL_VERSION} -aos
     popd
 
     ## Create an UnrealEngine symlink to the correct directory
-    ln -s ${ENGINE_CACHE_DIRECTORY}/${UNREAL_VERSION} ${UNREAL_PATH}
+    ln -s "${ENGINE_CACHE_DIRECTORY}/${UNREAL_VERSION}" "${UNREAL_PATH}"
 popd
