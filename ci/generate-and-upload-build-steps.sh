@@ -6,7 +6,7 @@ upload_build_configuration_step() {
     export BUILD_PLATFORM=$2
     export BUILD_TARGET=$3
     export BUILD_STATE=$4
-    export TEST_CONFIG=$5
+    export TEST_CONFIG={$5:-}
     buildkite-agent pipeline upload "ci/gdk_build.template.steps.yaml"
 }
 
