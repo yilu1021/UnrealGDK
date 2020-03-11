@@ -1,13 +1,19 @@
 #!/usr/bin/env bash
 
-UNREAL_EDITOR_PATH=${1}
-UPROJECT_PATH=${2}
-TEST_REPO_PATH=${3}
-LOG_FILE_PATH=${4}
-TEST_REPO_MAP=${5}
-REPORT_OUTPUT_PATH=${6}
-TESTS_PATH=${7:-SpatialGDK}
-RUN_WITH_SPATIAL=${8:-}
+UNREAL_PATH=${1}
+BUILD_HOME=${2}
+TEST_PROJECT_NAME=${3}
+RESULTS_NAME=${4}
+TESTS_PATH=${5:-SpatialGDK}
+RUN_WITH_SPATIAL=${6:-}
+
+
+TEST_REPO_PATH="${BUILD_HOME}/${TEST_PROJECT_NAME}"
+UPROJECT_PATH="${BUILD_HOME}/${TEST_PROJECT_NAME}/${TEST_REPO_RELATIVE_UPROJECT_PATH}"
+LOG_FILE_PATH="ci/${TEST_PROJECT_NAME}/${RESULTS_NAME}/tests.log"
+TEST_REPO_MAP="${TEST_PROJECT_NAME}/${RESULTS_NAME}"
+REPORT_OUTPUT_PATH="ci/${TEST_REPO_MAP}"
+
 
 if [[ -n "${RUN_WITH_SPATIAL}" ]]; then
 	echo "Generating snapshot and schema for testing project"
@@ -15,18 +21,23 @@ if [[ -n "${RUN_WITH_SPATIAL}" ]]; then
 	cp "${TEST_REPO_PATH}/spatial/snapshots/${TEST_REPO_MAP}.snapshot" "${TEST_REPO_PATH}/spatial/snapshots/default.snapshot" 
 fi
 
-rm -r ci/${REPORT_OUTPUT_PATH}
-mkdir ci/${REPORT_OUTPUT_PATH}
+mkdir ${REPORT_OUTPUT_PATH}
 
-${UNREAL_EDITOR_PATH} \
-	"$(pwd)/${UPROJECT_PATH}" \
-	"${TEST_REPO_MAP}"  \
-	-execCmds="Automation RunTests ${TESTS_PATH}; Quit" \
-	-TestExit="Automation Test Queue Empty" \
-	-ReportOutputPath="$(pwd)/ci/${REPORT_OUTPUT_PATH}" \
-	-ABSLOG="$(pwd)/${LOG_FILE_PATH}" \
-	-nopause \
-	-nosplash \
-	-unattended \
-	-nullRHI \
-	-OverrideSpatialNetworking=${RUN_WITH_SPATIAL} 
+pushd "${UNREAL_PATH}"
+	"${UNREAL_PATH}/Engine/Binaries/Mac/UE4Editor.app/Contents/MacOS/UE4Editor" \
+		"$(pwd)/${UPROJECT_PATH}" \
+		"${TEST_REPO_MAP}"  \
+		-execCmds="Automation RunTests ${TESTS_PATH}; Quit" \
+		-TestExit="Automation Test Queue Empty" \
+		-ReportOutputPath="$(pwd)/${REPORT_OUTPUT_PATH}" \
+		-ABSLOG="$(pwd)/${LOG_FILE_PATH}" \
+		-nopause \
+		-nosplash \
+		-unattended \
+		-nullRHI \
+		-OverrideSpatialNetworking=${RUN_WITH_SPATIAL}
+popd
+
+# TODO need to do this later
+#echo "--- report-tests"
+#"${GDK_HOME}/ci/report-tests.sh" "ci/${TEST_PROJECT_NAME}/VanillaTestResults"

@@ -29,33 +29,35 @@ ${GDK_HOME}/Setup.sh --mobile
 
 # Build the testing project
 echo "--- build-project"
-"${GDK_HOME}"/ci/build-project.sh "${UNREAL_PATH}" "${CHOSEN_TEST_REPO_BRANCH}" "${TEST_REPO_URL}" "${BUILD_HOME}/${TEST_PROJECT_NAME}/${TEST_REPO_RELATIVE_UPROJECT_PATH}" "${BUILD_HOME}/${TEST_PROJECT_NAME}" "${GDK_HOME}" "${BUILD_PLATFORM}" "${BUILD_STATE}" "${BUILD_TARGET}"
+"${GDK_HOME}"/ci/build-project.sh \
+	"${UNREAL_PATH}" \
+	"${CHOSEN_TEST_REPO_BRANCH}" \
+	"${TEST_REPO_URL}" \
+	"${BUILD_HOME}/${TEST_PROJECT_NAME}/${TEST_REPO_RELATIVE_UPROJECT_PATH}" \
+	"${BUILD_HOME}/${TEST_PROJECT_NAME}" \
+	"${GDK_HOME}" \
+	"${BUILD_PLATFORM}" \
+	"${BUILD_STATE}" \
+	"${BUILD_TARGET}"
 
 echo "--- run tests"
 "${GDK_HOME}/ci/run-tests.sh" \
-	"${UNREAL_PATH}/Engine/Binaries/Mac/UE4Editor.app/Contents/MacOS/UE4Editor" \
-	"${BUILD_HOME}/${TEST_PROJECT_NAME}/${TEST_REPO_RELATIVE_UPROJECT_PATH}" \
-	"${BUILD_HOME}/${TEST_PROJECT_NAME}" \
-	"ci/${TEST_PROJECT_NAME}/FastTestResults/tests.log" \
-	"${TEST_PROJECT_NAME}/FastTestResults" \
-	"${TEST_REPO_MAP}" \
+	"${UNREAL_PATH}" \
+	"${BUILD_HOME}" \
+	"${TEST_PROJECT_NAME}" \
+	"FastTestResults" \
 	"SpatialGDK+/Game/SpatialNetworkingMap" \
 	"True"
 
 if [[ -n "${SLOW_NETWORKING_TESTS}" ]]; then
 	echo "--- run slow networking tests"
 	"${GDK_HOME}/ci/run-tests.sh" \
-	"${UNREAL_PATH}/Engine/Binaries/Mac/UE4Editor.app/Contents/MacOS/UE4Editor" \
-	"${BUILD_HOME}/${TEST_PROJECT_NAME}/${TEST_REPO_RELATIVE_UPROJECT_PATH}" \
-	"${BUILD_HOME}/${TEST_PROJECT_NAME}" \
-	"ci/${TEST_PROJECT_NAME}/VanillaTestResults/tests.log" \
-	"${TEST_PROJECT_NAME}/VanillaTestResults" \
-	"${TEST_REPO_MAP}" \
-	"/Game/NetworkingMap"
-	""
-
-	# TODO need to do this later
-	#echo "--- report-tests"
-	#"${GDK_HOME}/ci/report-tests.sh" "ci/${TEST_PROJECT_NAME}/VanillaTestResults"
+		"${UNREAL_PATH}" \
+		"${BUILD_HOME}" \
+		"${TEST_PROJECT_NAME}" \
+		"VanillaTestResults" \
+		"ci/${TEST_REPO_MAP}" \
+		"/Game/NetworkingMap" \
+		""
 fi
 
