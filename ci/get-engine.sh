@@ -41,6 +41,7 @@ pushd "${GDK_HOME}"
     echo ${UNREAL_VERSION}
     ## Create an UnrealEngine-Cache directory if it doesn't already exist
     mkdir -p ${ENGINE_CACHE_DIRECTORY}
+    rm "${UNREAL_PATH}"
 
     pushd ${ENGINE_CACHE_DIRECTORY}
         echo "--- download-unreal-engine"
@@ -48,10 +49,10 @@ pushd "${GDK_HOME}"
         echo "Downloading Unreal Engine artifacts version ${UNREAL_VERSION} from ${ENGINE_GCS_PATH}"
         gsutil cp -n "${ENGINE_GCS_PATH}" "${UNREAL_VERSION}".zip
 
-       7z x "${UNREAL_VERSION}".zip -o${UNREAL_VERSION} -aos
+       7z x "${UNREAL_VERSION}".zip -o${UNREAL_PATH} -aos
     popd
 
     ## Create an UnrealEngine symlink to the correct directory
-    rm "${UNREAL_PATH}"
-    ln -s "${ENGINE_CACHE_DIRECTORY}/${UNREAL_VERSION}" "${UNREAL_PATH}"
+    #rm "${UNREAL_PATH}"
+    #ln -s "${ENGINE_CACHE_DIRECTORY}/${UNREAL_VERSION}" "${UNREAL_PATH}"
 popd
