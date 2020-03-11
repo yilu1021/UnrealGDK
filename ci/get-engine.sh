@@ -39,7 +39,7 @@ pushd "${GDK_HOME}"
     popd
 
     echo ${UNREAL_VERSION}
-    ## Create an UnrealEngine-Cache directory if it doesn't already exist.
+    ## Create an UnrealEngine-Cache directory if it doesn't already exist
     mkdir -p ${ENGINE_CACHE_DIRECTORY}
 
     pushd ${ENGINE_CACHE_DIRECTORY}
@@ -52,5 +52,6 @@ pushd "${GDK_HOME}"
     popd
 
     ## Create an UnrealEngine symlink to the correct directory
+    rm "${UNREAL_PATH}"
     ln -s "${ENGINE_CACHE_DIRECTORY}/${UNREAL_VERSION}" "${UNREAL_PATH}"
 popd
