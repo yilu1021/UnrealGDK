@@ -14,7 +14,7 @@ if [[ -n "${RUN_WITH_SPATIAL}" ]]; then
 	"${UNREAL_EDITOR_PATH}" "${UPROJECT_PATH}" -NoShaderCompile -nopause -nosplash -unattended -nullRHI -run=GenerateSchemaAndSnapshots -MapPaths="${TEST_REPO_MAP}"
 fi
 
-cp "${TEST_REPO_PATH}/spatial/sapshots/${TEST_REPO_MAP}.snapshot" "${TEST_REPO_PATH}/spatial/sapshots/default.snapshot" 
+cp "${TEST_REPO_PATH}/spatial/snapshots/${TEST_REPO_MAP}.snapshot" "${TEST_REPO_PATH}/spatial/snapshots/default.snapshot" 
 
 mkdir ci/${REPORT_OUTPUT_PATH}
 # Create the TestResults directory if it does not exist, for storing results
