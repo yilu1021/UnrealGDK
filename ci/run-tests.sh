@@ -12,9 +12,9 @@ RUN_WITH_SPATIAL=${8:-}
 if [[ -n "${RUN_WITH_SPATIAL}" ]]; then
 	echo "Generating snapshot and schema for testing project"
 	"${UNREAL_EDITOR_PATH}" "${UPROJECT_PATH}" -NoShaderCompile -nopause -nosplash -unattended -nullRHI -run=GenerateSchemaAndSnapshots -MapPaths="${TEST_REPO_MAP}"
+	cp "${TEST_REPO_PATH}/spatial/snapshots/${TEST_REPO_MAP}.snapshot" "${TEST_REPO_PATH}/spatial/snapshots/default.snapshot" 
 fi
 
-cp "${TEST_REPO_PATH}/spatial/snapshots/${TEST_REPO_MAP}.snapshot" "${TEST_REPO_PATH}/spatial/snapshots/default.snapshot" 
 
 mkdir ci/${REPORT_OUTPUT_PATH}
 # Create the TestResults directory if it does not exist, for storing results
@@ -31,7 +31,7 @@ ${UNREAL_EDITOR_PATH} \
 	"${UPROJECT_PATH}" \
 	"${TEST_REPO_MAP}"  \
 	-execCmds="Automation RunTests ${TESTS_PATH}; Quit" \
-	-TestExit="automation Test Queue Empty" \
+	-TestExit="Automation Test Queue Empty" \
 	-ReportOutputPath="ci/${REPORT_OUTPUT_PATH}" \
 	-ABSLOG="${LOG_FILE_PATH}" \
 	-nopause \
