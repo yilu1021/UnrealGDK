@@ -11,6 +11,8 @@ BUILD_STATE=${8}
 BUILD_TARGET=${9}
 
 # Clone the testing project
+
+rm -rf ${TESTP_REPO_PATH}
 echo "Downloading the testing project from ${TEST_REPO_URL}"
 git clone -b "${TEST_REPO_BRANCH}" "${TEST_REPO_URL}" "${TESTP_REPO_PATH}" --depth 1
 if [[ $? -ne 0 ]]; then
@@ -35,7 +37,9 @@ fi
 
 echo "--- Building project"
 
-#"${UNREAL_PATH}/Engine/Build/BatchFiles/Mac/Build.sh" "${BUILD_TARGET}" "${BUILD_PLATFORM}" "${BUILD_STATE}" "${TEST_REPO_UPORJECT_PATH}"
+"${UNREAL_PATH}/Engine/Build/BatchFiles/Mac/XcodeBuild.sh" "${BUILD_TARGET}" "${BUILD_PLATFORM}" "${BUILD_STATE}" "${TEST_REPO_UPORJECT_PATH}"
+
+echo "--- Building project 2"
 
 BUILD_CONFIGURATION=${BUILD_STATE}${BUILD_TARGET}
 
