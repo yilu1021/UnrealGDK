@@ -37,17 +37,9 @@ fi
 
 echo "--- Building project"
 
-pushd "${UNREAL_PATH}
-  Engine/Build/BatchFiles/Mac/XcodeBuild.sh" "${BUILD_TARGET}" "${BUILD_PLATFORM}" "${BUILD_STATE}" "${TEST_REPO_UPORJECT_PATH}"
+pushd "${UNREAL_PATH}"
+  "${UNREAL_PATH}/Engine/Build/BatchFiles/Mac/XcodeBuild.sh" "${BUILD_TARGET}" "${BUILD_PLATFORM}" "${BUILD_STATE}" "${TEST_REPO_UPORJECT_PATH}"
 popd
-
-echo "--- Building project 2"
-
-BUILD_CONFIGURATION=${BUILD_STATE}${BUILD_TARGET}
-
-TEST_REPO_UPORJECT_PATH=${TEST_REPO_UPORJECT_PATH/.uproject/.sln} # Replace / with _ since / is treated as the folder seperator in GCS
-
-mono msbuild /nologo ${TEST_REPO_UPORJECT_PATH} /p:Configuration="${BUILD_CONFIGURATION}";Platform="${BUILD_PLATFORM}"
 
 if [[ $? -ne 0 ]]; then
   echo "Failed to build testing project."
