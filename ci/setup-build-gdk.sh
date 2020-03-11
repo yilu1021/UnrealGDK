@@ -36,10 +36,10 @@ echo "--- run tests"
 	"${UNREAL_PATH}/Engine/Binaries/Mac/UE4Editor.app/Contents/MacOS/UE4Editor" \
 	"${BUILD_HOME}/${TEST_PROJECT_NAME}/${TEST_REPO_RELATIVE_UPROJECT_PATH}" \
 	"${BUILD_HOME}/${TEST_PROJECT_NAME}" \
-	"ci/${TEST_PROJECT_NAME}/FastTestResults/tests.log"
-	"${TEST_PROJECT_NAME}/FastTestResults"
-	"${TEST_REPO_MAP}"
-	"SpatialGDK+/Game/SpatialNetworkingMap"
+	"ci/${TEST_PROJECT_NAME}/FastTestResults/tests.log" \
+	"${TEST_PROJECT_NAME}/FastTestResults" \
+	"${TEST_REPO_MAP}" \
+	"SpatialGDK+/Game/SpatialNetworkingMap" \
 	"True"
 
 if [[ -n "${SLOW_NETWORKING_TESTS}" ]]; then
@@ -48,9 +48,9 @@ if [[ -n "${SLOW_NETWORKING_TESTS}" ]]; then
 	"${UNREAL_PATH}/Engine/Binaries/Mac/UE4Editor.app/Contents/MacOS/UE4Editor" \
 	"${BUILD_HOME}/${TEST_PROJECT_NAME}/${TEST_REPO_RELATIVE_UPROJECT_PATH}" \
 	"${BUILD_HOME}/${TEST_PROJECT_NAME}" \
-	"ci/${TEST_PROJECT_NAME}/VanillaTestResults/tests.log"
-	"${TEST_PROJECT_NAME}/VanillaTestResults"
-	"${TEST_REPO_MAP}"
+	"ci/${TEST_PROJECT_NAME}/VanillaTestResults/tests.log" \
+	"${TEST_PROJECT_NAME}/VanillaTestResults" \
+	"${TEST_REPO_MAP}" \
 	"/Game/NetworkingMap"
 	""
 
